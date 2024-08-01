@@ -1,0 +1,36 @@
+import csv
+
+def move_column(input_file, output_file, from_position, to_position):
+    with open(input_file, 'r', newline='') as infile, open(output_file, 'w', newline='') as outfile:
+        reader = csv.reader(infile)
+        writer = csv.writer(outfile)
+
+        # Read the header
+        header = next(reader)
+
+        # Adjust for 0-based indexing
+        from_position -= 1
+        to_position -= 1
+
+        # Move the column in the header
+        column_to_move = header.pop(from_position)
+        header.insert(to_position, column_to_move)
+
+        # Write the new header
+        writer.writerow(header)
+
+        # Process each row
+        for row in reader:
+            # Move the column in the row
+            value_to_move = row.pop(from_position)
+            row.insert(to_position, value_to_move)
+            writer.writerow(row)
+
+    print(f"Process completed. Output saved to {output_file}")
+
+# Get user input
+input_file = input("Enter the path to the input CSV file: ")
+output_file = input("Enter the path for the output CSV file: ")
+
+# Move column from 13th position (index 12) to 5th position (index 4)
+move_column(input_file, output_file, 12, 5)
